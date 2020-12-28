@@ -4,6 +4,16 @@ Perform sentiment analysis on Twitter accounts that you follow
 
 Uses the [Twitter v2 "Early Access" API](https://developer.twitter.com/en/docs/twitter-api/early-access), and requires a developer bearer token.
 
+## Installing
+
+Start by cloning or downloading this repo locally.
+
+Next, install the required Python modules with:
+
+```
+pip3 install --user -r requirements.txt
+```
+
 ## Using
 
 Set your bearer token on the command line:

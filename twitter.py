@@ -3,10 +3,11 @@
 
 # Built on the Twitter v2 API
 
-import requests
 import json
 import os
 import sys
+
+import requests
 from textblob import TextBlob
 
 
