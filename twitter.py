@@ -66,15 +66,19 @@ class Twitter:
         print(f'User ID: {uid}')
         follows = self.get_following(uid)
         print(f'This user is following {len(follows)} accounts.')
-        for follow in follows:
+        for follow in follows:  # For each followed account ... 
             print(f'@{follow["username"]}: {follow["name"]} (User ID: {follow["id"]})')
             tweet_history = self.get_tweet_history_for_user(follow['id'])
-            sentiment = float(0)
-            for tweet in tweet_history:
-                p, _ = TextBlob(tweet['text']).sentiment
-                sentiment = sentiment + p
-            sentiment_score = sentiment / (len(tweet_history))
-            print(f'  Sentiment score for this user: {round( round(sentiment_score, 2)*100)}% positive ( {sentiment} / {len(tweet_history)} )')
+            polarity = float(0)
+            subjectivity = float(0)
+            for tweet in tweet_history:  # Do sentiment analysis for each tweet
+                p, s = TextBlob(tweet['text']).sentiment
+                polarity = polarity + p
+                subjectivity = subjectivity + s
+            num_tweets = len(tweet_history)
+            polarity_score = polarity / num_tweets
+            subjectivity_score = subjectivity / num_tweets
+            print(f'  Sentiment score: {round(polarity_score * 100)}% positive, {round(subjectivity_score * 100)}% subjective over the last {len(tweet_history)} tweets.')
 
 if __name__ == "__main__":
     username = sys.argv[1]
