@@ -4,7 +4,7 @@ Perform sentiment analysis on Twitter accounts that you follow
 
 Uses the [Twitter v2 "Early Access" API](https://developer.twitter.com/en/docs/twitter-api/early-access), and requires a developer bearer token.
 
-# Using
+## Using
 
 Set your bearer token on the command line:
 
@@ -17,3 +17,8 @@ Next, run the script with:
 ```
 ./twitter.py username_to_review
 ```
+
+## Potential future improvements
+
+- Improve error handling
+- Using numpy and pandas for data framing
