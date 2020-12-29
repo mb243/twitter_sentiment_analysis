@@ -5,6 +5,7 @@
 
 import json
 import os
+import re
 import sys
 
 import requests
@@ -62,6 +63,16 @@ class Twitter:
             return []
         return j['data']
 
+    def get_match(self, needle: str, haystack: str, group: int = 0, default: str = "") -> str:
+        """
+        Helper function to extract matches from regex easily.
+        """
+        match = re.search(needle, haystack)
+        if match:
+            return match.group(group) if match.group(group) != '' else default
+        else:
+            return default
+
     def run(self):
         uid = self.get_userid(self.username)
         print(f'User ID: {uid}')
@@ -72,14 +83,23 @@ class Twitter:
             tweet_history = self.get_tweet_history_for_user(follow['id'])
             polarity = float(0)
             subjectivity = float(0)
+            rt_count = 0
+            at_count = 0
             for tweet in tweet_history:  # Do sentiment analysis for each tweet
+                if self.get_match('^RT @[0-9A-Za-z_]*:', tweet['text']):
+                    rt_count += 1
+                at_count += len(re.findall('@[0-9A-Za-z_]*', tweet['text']))
                 p, s = TextBlob(tweet['text']).sentiment
                 polarity = polarity + p
                 subjectivity = subjectivity + s
             num_tweets = len(tweet_history)
             polarity_score = polarity / num_tweets
             subjectivity_score = subjectivity / num_tweets
-            print(f'  Sentiment score: {round(polarity_score * 100)}% positive, {round(subjectivity_score * 100)}% subjective over the last {len(tweet_history)} tweets.')
+            print(f'  Sentiment score: {round(polarity_score * 100)}% positive, '
+                f'{round(subjectivity_score * 100)}% subjective. '
+                f'{rt_count} retweets, '
+                f'{at_count} mentions. '
+                f'(last {len(tweet_history)} tweets)')
 
 if __name__ == "__main__":
     username = sys.argv[1]
